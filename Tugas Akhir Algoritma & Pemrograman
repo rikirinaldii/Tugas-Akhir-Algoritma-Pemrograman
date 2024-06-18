@@ -1,0 +1,102 @@
+Riki Rinaldi
+12250514852
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h> // Untuk fungsi system()
+
+bool verifikasi_pin(int pin_benar) {
+    int pin;
+    printf("Masukkan PIN Anda: ");
+    scanf("%d", &pin);
+    if (pin == pin_benar) {
+        return true;
+    } else {
+        printf("PIN yang Anda masukkan salah.\n");
+        return false;
+    }
+}
+
+void clear_screen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+int main() {
+    printf("===SELAMAT DATANG DI ATM BNI===\n");
+    int pin_benar = 290220;
+
+    if (verifikasi_pin(pin_benar)) {
+        printf("PIN yang Anda masukkan benar.\n");
+        float saldo = 1000000.0;
+        int pilihan;
+        float jumlah;
+        while (1) {
+            printf("\nMenu ATM:\n");
+            printf("1. Cek Saldo\n");
+            printf("2. Tarik Tunai\n");
+            printf("3. Setor Tunai\n");
+            printf("4. Top Up\n");
+            printf("5. Keluar\n");
+            printf("Pilih menu: ");
+            scanf("%d", &pilihan);
+            clear_screen(); // Membersihkan layar saat berpindah menu
+            switch (pilihan) {
+                case 1:
+                    if (verifikasi_pin(pin_benar)) {
+                        printf("Saldo Anda: %.2f\n", saldo);
+                    }
+                    break;
+                case 2:
+                    if (verifikasi_pin(pin_benar)) {
+                        printf("Masukkan jumlah yang ingin ditarik: ");
+                        scanf("%f", &jumlah);
+                        if (jumlah > saldo) {
+                            printf("Saldo tidak mencukupi\n");
+                        } else {
+                            saldo -= jumlah;
+                            printf("Anda telah menarik: %.2f\n", jumlah);
+                            printf("Saldo Anda sekarang: %.2f\n", saldo);
+                        }
+                    }
+                    break;
+                case 3:
+                    if (verifikasi_pin(pin_benar)) {
+                        printf("Masukkan jumlah yang ingin disetor: ");
+                        scanf("%f", &jumlah);
+                        saldo += jumlah;
+                        printf("Anda telah melakukan setor tunai sebesar: %.2f\n", jumlah);
+                        printf("Saldo Anda sekarang: %.2f\n", saldo);
+                    }
+                    break;
+                case 4:
+                    if (verifikasi_pin(pin_benar)) {
+                        char nomor_dana[20];
+                        printf("Masukkan Nomor DANA: ");
+                        scanf("%s", nomor_dana);
+                        printf("Masukkan jumlah Top Up: ");
+                        scanf("%f", &jumlah);
+                        if (jumlah > saldo) {
+                            printf("Saldo tidak mencukupi\n");
+                        } else {
+                            saldo -= jumlah;
+                            printf("Anda telah melakukan Top Up sebesar: %.2f ke nomor DANA %s\n", jumlah, nomor_dana);
+                            printf("Saldo Anda sekarang: %.2f\n", saldo);
+                        }
+                    }
+                    break;
+                case 5:
+                    printf("Terima kasih telah menggunakan ATM kami.\n");
+                    return 0;
+                default:
+                    printf("Pilihan tidak valid.\n");
+            }
+        }
+    } else {
+        printf("PIN yang Anda masukkan salah.\n");
+    }
+
+    return 0;
+}
